@@ -1,0 +1,6 @@
+data/data_ngs/*
+data/data_proc/*
+data/reference_to_screen/AE016879.fasta
+
+!data/data_ngs/.gitkeep
+!data/data_proc/.gitkeep
