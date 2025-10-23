@@ -1,14 +1,16 @@
 
 
 ```{r}
+# Get from reference genome the nucleotide&amino acids sequences of gene BA3367
+
 library(Biostrings)
-genome_seq <- readDNAStringSet("../reference_to_screen/AE016879.fasta")
+genome_seq <- readDNAStringSet("../data/reference_to_screen/AE016879.fasta")
 target_chromosome_name <- "AE016879.1 Bacillus anthracis str. Ames, complete genome"
 start_position <- 3097033
 end_position <- 3098820
 target_sequence <- genome_seq[names(genome_seq) == target_chromosome_name]
 section_seq <- subseq(target_sequence, start=start_position, end=end_position)
-writeXStringSet(section_seq, "../reference_to_screen/BA_3367_AE016879.fasta")
+writeXStringSet(section_seq, "../data/reference_to_screen/BA_3367_AE016879.fasta")
 
 reverse_complement_dna <- reverseComplement(section_seq)
 amino_acid_sequence <- Biostrings::translate(reverse_complement_dna)
@@ -17,21 +19,22 @@ aa_set_to_save <- AAStringSet(amino_acid_sequence)
 names(aa_set_to_save) <- paste0("BA3367_AA")
 
 writeXStringSet(aa_set_to_save, 
-              filepath = paste0("../reference_to_screen/BA3367_AA.fasta"), 
+              filepath = paste0("../data/reference_to_screen/BA3367_AA.fasta"), 
               format = "fasta")
 ```
 
 
 ```{r}
+# from annotatd mappings on CTMA sample retreive a correct genome version of each sample
 
-files <- sub("\\.vcf(?:\\.gz)?$", "", list.files(path = "../data_proc/06a_freebayes_gamma_phage",
+files <- sub("\\.vcf(?:\\.gz)?$", "", list.files(path = "../data/data_proc/06a_freebayes_gamma_phage",
                     pattern = "^CTMA_.*\\.vcf(?:\\.gz)?$",
                     full.names = FALSE))
 
-ref <- paste0("reference_to_screen/AE016879.fasta")
+ref <- paste0("data/reference_to_screen/AE016879.fasta")
 for (file in files){
-  vcf <- paste0("data_proc/06a_freebayes_gamma_phage/",file,".vcf")
-  consensus <- paste0("data_proc/06a_freebayes_gamma_phage/",file,".fasta")
+  vcf <- paste0("data/data_proc/06a_freebayes_gamma_phage/",file,".vcf")
+  consensus <- paste0("data/data_proc/06a_freebayes_gamma_phage/",file,".fasta")
   
   myarg <- paste0('run --rm -v ./../:/data --cpus=2 staphb/bcftools:1.21 sh -c "bcftools view /data/',vcf,' -Oz -o /data/',vcf,'.gz','"')
   system2("docker", args = myarg)
@@ -43,11 +46,12 @@ for (file in files){
 ```
 
 ```{r}
+# From the corrected sample genomes extract the part linked to the BA3367 gene for future AlphaFold modelling
 
-BA3367 <- readDNAStringSet("../reference_to_screen/BA_3367_AE016879.fasta")
+BA3367 <- readDNAStringSet("../data/reference_to_screen/BA_3367_AE016879.fasta")
 
 for (file in files){
-  CTMA_X <- readDNAStringSet(paste0("../data_proc/06a_freebayes_gamma_phage/",file,".fasta"))
+  CTMA_X <- readDNAStringSet(paste0("../data/data_proc/06a_freebayes_gamma_phage/",file,".fasta"))
   
   shortened_CTMA_X <- CTMA_X[[1]][3090000:3150000]
   
@@ -62,15 +66,17 @@ for (file in files){
   names(aa_set_to_save) <- paste0(file, "_BA3367_AA")
   
   writeXStringSet(aa_set_to_save, 
-                filepath = paste0("../data_proc/06a_freebayes_gamma_phage/", file, "_BA3367_AA.fasta"), 
+                filepath = paste0("../data/data_proc/06a_freebayes_gamma_phage/", file, "_BA3367_AA.fasta"), 
                 format = "fasta")s
 
 }
 ```
 
 ```{r}
-files <- list.files("../data_proc/06a_freebayes_gamma_phage/", pattern="\\_BA3367_AA_subset_region_2.fasta$", ignore.case=TRUE, full.names=TRUE)
-out <- file("../data_proc/06a_freebayes_gamma_phage/combined_BA3367_AA_subset_region_2.fasta.fasta", "w")
+# Combine sequences for read allignment comparison
+
+files <- list.files("../data/data_proc/06a_freebayes_gamma_phage/", pattern="\\_BA3367_AA_subset_region_2.fasta$", ignore.case=TRUE, full.names=TRUE)
+out <- file("../data/data_proc/06a_freebayes_gamma_phage/combined_BA3367_AA_subset_region_2.fasta.fasta", "w")
 for(f in files) {
   name <- tools::file_path_sans_ext(basename(f))
   for(line in readLines(f)) {

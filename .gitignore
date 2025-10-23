@@ -1,6 +1,8 @@
 data/data_ngs/*
-data/data_proc/*
+data/data_proc/02a_mapping_gamma_phage/*
+data/data_proc/06a_freebayes_gamma_phage/*
 data/reference_to_screen/AE016879.fasta
 
 !data/data_ngs/.gitkeep
-!data/data_proc/.gitkeep
+!data/data_proc/02a_mapping_gamma_phage/.gitkeep
+!data/data_proc/06a_freebayes_gamma_phage/.gitkeep
