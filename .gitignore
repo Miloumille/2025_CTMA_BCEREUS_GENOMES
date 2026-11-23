@@ -6,3 +6,53 @@ data/reference_to_screen/AE016879.fasta
 !data/data_ngs/.gitkeep
 !data/data_proc/02a_mapping_gamma_phage/.gitkeep
 !data/data_proc/06a_freebayes_gamma_phage/.gitkeep
+
+# >>> standard CTMA bioinfo (migration 2026-11-23) >>>
+# Données : jamais sur GitHub ni sur le partage UCL (liens vers projects_data / NAS)
+/data
+/data_proc
+*.fastq
+*.fq
+*.fastq.gz
+*.fq.gz
+*.bam
+*.bai
+*.sam
+*.cram
+*.crai
+*.pod5
+*.fast5
+*.sif
+*.sra
+*.RData
+*.rdata
+*.h5
+# Environnements, caches, fichiers système
+.Rproj.user/
+.Rhistory
+.RDataTmp
+.venv/
+venv/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+._*
+Thumbs.db
+.~lock.*#
+# Local et secrets
+env/paths.local.env
+.env
+.Renviron
+.claude/
+.codex/
+id_rsa*
+*.pem
+*.key
+# Gros fichiers déplacés vers projects_data (liens locaux)
+/data/reference_to_screen/Bacillus_Anthracis/AE016879.fasta
+/data/reference_to_screen/Bacillus_Anthracis/AE016879.fasta.fai
+/data/reference_to_screen/GamR/AE016879_BA3367.fasta
+/data/reference_to_screen/GamR/AE016879_BA3367_AA.fasta
+/data/reference_to_screen/Gamma_phage/GCA_000864165.1.fasta
+/data/reference_to_screen/LambdaBA/Bacillus_phage_lambda.fasta
+# <<< standard CTMA bioinfo <<<
